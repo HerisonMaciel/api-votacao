@@ -11,10 +11,10 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 @RestController
 @Log4j2
@@ -29,14 +29,17 @@ public class PautaController {
     @PostMapping(value = "/cadastrar")
     public ResponseEntity<PautaResponseDto> criarPauta(@RequestBody @Valid PautaRequestDto pautaRequest) {
         log.info("Criando pauta... " + pautaRequest.toString());
-
         Pauta pauta = objectMapper.convertValue(pautaRequest, Pauta.class);
-        pauta = pautaService.adicionarPauta(pauta);
+        pauta = pautaService.adicionarPauta(pauta, LocalDateTime.now());
         log.info("Pauta criada com sucesso!");
-
         return ResponseEntity.ok(objectMapper.convertValue(pauta, PautaResponseDto.class))
                 .status(HttpStatus.CREATED)
                 .build();
+    }
+
+    @GetMapping(value = "/{id}")
+    public Optional<Pauta> getPauta(@PathVariable Integer id) {
+        return pautaService.getPauta(id);
     }
 
 }
