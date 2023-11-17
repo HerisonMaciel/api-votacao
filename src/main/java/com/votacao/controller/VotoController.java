@@ -30,7 +30,7 @@ public class VotoController {
             log.info("Voto registrado com sucesso!");
         }catch (ExceptionVotacao e){
             log.info("Voto não registrado! Erro: " + e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NO_CONTENT);
+            return ResponseEntity.status(e.getHttpStatus()).body(e.getMessage());
         }
         return ResponseEntity.ok().build();
     }
