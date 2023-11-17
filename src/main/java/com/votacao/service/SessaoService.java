@@ -2,14 +2,11 @@ package com.votacao.service;
 
 import com.votacao.entity.Pauta;
 import com.votacao.entity.Sessao;
-import com.votacao.repository.PautaRepository;
 import com.votacao.repository.SessaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -41,6 +38,10 @@ public class SessaoService {
 
     public Integer getTempoPadrao() {
         return TEMPOPADRAO;
+    }
+
+    public Optional<Sessao> getSessao(Pauta pauta) {
+        return sessaoRepository.findByPauta(pauta);
     }
 
 }
