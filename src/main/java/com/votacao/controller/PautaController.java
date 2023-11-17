@@ -33,7 +33,7 @@ public class PautaController {
     public ResponseEntity<PautaResponseDto> criarPauta(@RequestBody @Valid PautaRequestDto pautaRequest) {
         log.info("Criando pauta... " + pautaRequest.toString());
         Pauta pauta = objectMapper.convertValue(pautaRequest, Pauta.class);
-        pauta = pautaService.adicionarPauta(pauta, LocalDateTime.now());
+        pauta = pautaService.adicionarPauta(pauta);
         log.info("Pauta criada com sucesso!");
         return ResponseEntity.ok(objectMapper.convertValue(pauta, PautaResponseDto.class))
                 .status(HttpStatus.CREATED)

@@ -23,7 +23,7 @@ public class PautaService {
     @Autowired
     private SessaoRepository sessaoRepository;
 
-    public Pauta adicionarPauta(Pauta pauta, LocalDateTime now){
+    public Pauta adicionarPauta(Pauta pauta){
         return pautaRepository.save(pauta);
     }
 
