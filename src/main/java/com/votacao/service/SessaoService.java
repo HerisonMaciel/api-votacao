@@ -1,5 +1,6 @@
 package com.votacao.service;
 
+import com.votacao.dtos.request.SessaoRequestDto;
 import com.votacao.entity.Pauta;
 import com.votacao.entity.Sessao;
 import com.votacao.enuns.MensagemException;
@@ -25,7 +26,7 @@ public class SessaoService {
     @Autowired
     private PautaRepository pautaRepository;
 
-    public Integer getTempoPadrao() {
+    public Integer getTempo() {
         return TEMPOPADRAO;
     }
 
@@ -33,14 +34,18 @@ public class SessaoService {
         return sessaoRepository.findByPauta(pauta);
     }
 
-    public void iniciarSessao(Integer idPauta, Integer tempoSeg) {
-       Pauta pauta = pautaRepository.getReferenceById(idPauta);
+    public void iniciarSessao(SessaoRequestDto sessaoRequestDto) {
+       Pauta pauta = pautaRepository.getReferenceById(sessaoRequestDto.getIdPauta());
 
-        LocalDateTime dataFechamento = LocalDateTime.now().plusSeconds(tempoSeg);
+       LocalDateTime dataFechamento = LocalDateTime.now().plusSeconds(TEMPOPADRAO);
 
-        if(Objects.requireNonNull(getSessao(pauta)).isPresent()){
-            throw new ExceptionVotacao(MensagemException.SESSAO_JA_EXISTE, HttpStatus.CONFLICT);
-        }
+       if(sessaoRequestDto.getTempoSegundo() != null){
+           dataFechamento = LocalDateTime.now().plusSeconds(sessaoRequestDto.getTempoSegundo());
+       }
+
+       if(Objects.requireNonNull(getSessao(pauta)).isPresent()){
+           throw new ExceptionVotacao(MensagemException.SESSAO_JA_EXISTE, HttpStatus.CONFLICT);
+       }
 
        criaSessao(pauta, dataFechamento);
     }

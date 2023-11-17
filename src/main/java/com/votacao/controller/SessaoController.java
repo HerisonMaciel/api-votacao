@@ -1,15 +1,15 @@
 package com.votacao.controller;
 
+import com.votacao.dtos.request.SessaoRequestDto;
+import com.votacao.dtos.request.VotoRequestDto;
 import com.votacao.exception.ExceptionVotacao;
 import com.votacao.service.SessaoService;
+import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
@@ -21,13 +21,15 @@ public class SessaoController {
     @Autowired
     private SessaoService sessaoService;
 
-    @PostMapping("/{idPauta}/iniciar-sessao/{tempoSeg}")
-    public ResponseEntity iniciarSessaoVotacao(@PathVariable("idPauta") Integer idPauta, @PathVariable("tempoSeg") Integer tempoSeg) {
+    @PostMapping("/iniciar-sessao")
+    public ResponseEntity iniciarSessaoVotacao(@RequestBody SessaoRequestDto sessaoRequestDto) {
 
         try{
-            log.info("Iniciando sessão de votação...", idPauta);
-            sessaoService.iniciarSessao(idPauta, tempoSeg);
-            log.info("Sessão de votação iniciada com sucesso, o tempo de votação encerra em " + sessaoService.getTempoPadrao() + " segundos.");
+            log.info("Iniciando sessão de votação...", sessaoRequestDto.getIdPauta());
+            sessaoService.iniciarSessao(sessaoRequestDto);
+            if(sessaoRequestDto.getTempoSegundo() == null)
+                log.info("Sessão de votação iniciada com sucesso, o tempo de votação encerra em " + sessaoService.getTempo() + " segundos.");
+            else log.info("Sessão de votação iniciada com sucesso, o tempo de votação encerra em " + sessaoRequestDto.getTempoSegundo() + " segundos.");
         }catch (ExceptionVotacao e){
             log.info("Sessão não iniciada! Erro: " + e.getMessage());
             return ResponseEntity.status(e.getHttpStatus()).body(e.getMessage());
