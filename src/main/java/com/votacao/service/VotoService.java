@@ -2,14 +2,15 @@ package com.votacao.service;
 
 import com.votacao.entity.Sessao;
 import com.votacao.entity.Voto;
-import com.votacao.enuns.MensagemVoto;
+import com.votacao.enuns.MensagemException;
+import com.votacao.exception.ExceptionVotacao;
 import com.votacao.repository.VotoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+
 
 @Service
 public class VotoService {
@@ -25,15 +26,22 @@ public class VotoService {
 
     public void votar(Integer idPauta, Voto voto) {
 
-        Sessao sessao = sessaoService.getSessao(pautaService.getPauta(idPauta).get()).get();
+        Sessao sessao = sessaoService.getSessao(pautaService.getPauta(idPauta)
+                .orElseThrow(() -> new ExceptionVotacao(MensagemException.PAUTA_NAO_ENCONTRADA, HttpStatus.NOT_FOUND)))
+                .orElseThrow(() -> new ExceptionVotacao(MensagemException.SESSAO_NAO_ENCONTRADA, HttpStatus.NOT_FOUND));
+
+        if (LocalDateTime.now().isAfter(sessao.getDataFechamento())) {
+            throw new ExceptionVotacao(MensagemException.SESSAO_FECHADA, HttpStatus.BAD_REQUEST);
+        }
 
         voto.setSessao(sessao);
         voto.setDataHora(LocalDateTime.now());
 
-        if(!votoRepository.existsBySessaoAndCpfEleitor(sessao, voto.getCpfEleitor())) {
-            System.out.println( " VOTO: " + voto.toString());
-            votoRepository.save(voto);
+        if(votoRepository.existsBySessaoAndCpfEleitor(sessao, voto.getCpfEleitor())) {
+            throw new ExceptionVotacao(MensagemException.VOTO_JA_REGISTRADO, HttpStatus.BAD_REQUEST);
         }
+
+        votoRepository.save(voto);
 
     }
 
