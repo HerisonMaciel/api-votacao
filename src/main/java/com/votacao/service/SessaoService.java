@@ -4,6 +4,7 @@ import com.votacao.entity.Pauta;
 import com.votacao.entity.Sessao;
 import com.votacao.enuns.MensagemException;
 import com.votacao.exception.ExceptionVotacao;
+import com.votacao.repository.PautaRepository;
 import com.votacao.repository.SessaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ public class SessaoService {
     private SessaoRepository sessaoRepository;
 
     @Autowired
-    private PautaService pautaService;
+    private PautaRepository pautaRepository;
 
     public Integer getTempoPadrao() {
         return TEMPOPADRAO;
@@ -33,7 +34,7 @@ public class SessaoService {
     }
 
     public void iniciarSessao(Integer idPauta, Integer tempoSeg) {
-       Pauta pauta = pautaService.getPauta(idPauta).get();
+       Pauta pauta = pautaRepository.getReferenceById(idPauta);
 
         LocalDateTime dataFechamento = LocalDateTime.now().plusSeconds(tempoSeg);
 

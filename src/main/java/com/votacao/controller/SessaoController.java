@@ -33,7 +33,6 @@ public class SessaoController {
             return ResponseEntity.status(e.getHttpStatus()).body(e.getMessage());
         }
 
-
         return ResponseEntity.ok().build();
     }
 
