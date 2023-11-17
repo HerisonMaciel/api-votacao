@@ -7,6 +7,7 @@ import com.votacao.exception.ExceptionVotacao;
 import com.votacao.repository.PautaRepository;
 import com.votacao.repository.SessaoRepository;
 import com.votacao.repository.VotoRepository;
+import com.votacao.utils.UtilCpf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,12 @@ public class VotoService {
 
         if (LocalDateTime.now().isAfter(sessao.getDataFechamento())) {
             throw new ExceptionVotacao(MensagemException.SESSAO_FECHADA, HttpStatus.BAD_REQUEST);
+        }
+
+        voto.setCpfEleitor(UtilCpf.removerCaracteresNaoNumericos(voto.getCpfEleitor()));
+
+        if(!UtilCpf.validarCPF(voto.getCpfEleitor())){
+            throw new ExceptionVotacao(MensagemException.CPF_INVALIDO, HttpStatus.NOT_ACCEPTABLE);
         }
 
         voto.setSessao(sessao);

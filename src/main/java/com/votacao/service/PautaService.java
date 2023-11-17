@@ -29,7 +29,7 @@ public class PautaService {
 
     public Optional<Pauta> getPauta(Integer id) {
         Optional<Pauta> pauta = Optional.ofNullable(pautaRepository.findById(id)
-                .orElseThrow(() -> new ExceptionVotacao(MensagemException.PAUTA_NAO_ENCONTRADA, HttpStatus.NOT_FOUND)));
+                .orElseThrow(() -> new ExceptionVotacao(MensagemException.PAUTA_NAO_ENCONTRADA, HttpStatus.NO_CONTENT)));
         return pauta;
     }
 

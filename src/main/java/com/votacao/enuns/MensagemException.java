@@ -30,6 +30,12 @@ public enum MensagemException {
         public String getErroMensagem() {
             return "Pauta não encontrada!";
         }
+    },
+    CPF_INVALIDO{
+        @Override
+        public String getErroMensagem() {
+            return "CPF INVALIDO!";
+        }
     };
 
     public abstract String getErroMensagem();
