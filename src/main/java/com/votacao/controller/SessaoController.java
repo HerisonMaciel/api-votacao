@@ -22,7 +22,7 @@ public class SessaoController {
     private SessaoService sessaoService;
 
     @PostMapping("/iniciar-sessao")
-    public ResponseEntity iniciarSessaoVotacao(@RequestBody SessaoRequestDto sessaoRequestDto) {
+    public ResponseEntity iniciarSessao(@RequestBody SessaoRequestDto sessaoRequestDto) {
 
         try{
             log.info("Iniciando sessão de votação...", sessaoRequestDto.getIdPauta());
