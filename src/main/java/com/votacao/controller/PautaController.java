@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.votacao.dtos.request.PautaRequestDto;
 import com.votacao.dtos.response.PautaResponseDto;
 import com.votacao.entity.Pauta;
-import com.votacao.entity.Voto;
 import com.votacao.exception.ExceptionVotacao;
 import com.votacao.service.PautaService;
 import jakarta.validation.Valid;
@@ -15,7 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+
 import java.util.*;
 import java.util.stream.Collectors;
 

@@ -18,7 +18,6 @@ import java.util.Collection;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
@@ -46,9 +45,6 @@ public class SessaoServiceTest {
 
     @BeforeEach
     public void setUp(){
-        /*pauta = new Pauta(01 , "pauta01");
-        votos = new ArrayList<Voto>((Collection<? extends Voto>) new Voto("898.440.550-75",
-                MensagemVoto.SIM, LocalDateTime.now(), sessao));*/
         sessao = new Sessao(01, LocalDateTime.now(),
                 LocalDateTime.now().plusSeconds(60), pauta, votos);
         sessaoRequestDto = new SessaoRequestDto(pauta.getId(), 300);
