@@ -1,12 +1,17 @@
 package com.votacao.controller;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.votacao.dtos.request.PautaRequestDto;
 import com.votacao.dtos.response.PautaResponseDto;
 import com.votacao.entity.Pauta;
 import com.votacao.exception.ExceptionVotacao;
 import com.votacao.service.PautaService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +33,13 @@ public class PautaController {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Operation(summary = "Criação da Pauta", description = "Criação da Pauta", tags = {"Pauta"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Ok",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = PautaResponseDto.class)))),
+            @ApiResponse(responseCode = "400", description = "Request invalid!"),
+            @ApiResponse(responseCode = "404", description = "Not found"),
+    })
     @PostMapping(value = "/cadastrar")
     public ResponseEntity<PautaResponseDto> criarPauta(@RequestBody @Valid PautaRequestDto pautaRequest) {
         log.info("Criando pauta... " + pautaRequest.toString());
@@ -39,6 +51,13 @@ public class PautaController {
                 .build();
     }
 
+    @Operation(summary = "Busca da Pauta", description = "Buscar Pauta", tags = {"Pauta"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ok",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = PautaResponseDto.class)))),
+            @ApiResponse(responseCode = "400", description = "Request invalid!"),
+            @ApiResponse(responseCode = "404", description = "Not found"),
+    })
     @GetMapping(value = "/{id}")
     public ResponseEntity<PautaResponseDto> getPauta(@PathVariable Integer id) {
 
@@ -55,7 +74,13 @@ public class PautaController {
 
     }
 
-
+    @Operation(summary = "Buscar todas as pautas resolvidas", description = "Buscar todas as pautas resolvidas", tags = {"Pauta"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ok",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = PautaResponseDto.class)))),
+            @ApiResponse(responseCode = "400", description = "Request invalid!"),
+            @ApiResponse(responseCode = "404", description = "Not found"),
+    })
     @GetMapping(value = "/pautas-resolvidas")
     public List<PautaResponseDto> getPautasComResultado() {
         log.info("Consultando pautas...");
